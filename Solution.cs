@@ -1,5 +1,5 @@
 
-class hr1058829
+class Solution
 {
     
     public static void Q1(ExamContext db, string Name)
