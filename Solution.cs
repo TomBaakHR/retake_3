@@ -93,7 +93,16 @@ class Solution
 
     public static void Q5(ExamContext db)
     {
- 
+        var sold_products = (from sc in db.ShoppingCarts
+                            group sc by sc.ProductID into products
+                            select products.Key).ToList();
+
+        var unsold_products = db.Products.Where(p => !sold_products.Contains(p.ID)).ToList();
+
+        foreach (var item in unsold_products)
+        {
+             Console.WriteLine($"Product:{item.ID},{item.Name},{item.Price}");
+        }
     }
 
     public static void Q6(ExamContext db)
