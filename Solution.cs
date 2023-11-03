@@ -59,7 +59,36 @@ class Solution
 
     public static void Q4(ExamContext db, int OrderID)
     {
-       
+        var order = (from o in db.Orders
+                    join c in db.Customers on o.CustomerID equals c.ID
+                    where o.ID == OrderID
+                    select new {
+                        ID = o.ID,
+                        CustomerName = c.FirstName + " " + c.LastName,
+                        Date = o.dateTime
+                    }).FirstOrDefault();
+
+        var shoppingCartList = (from sc in db.ShoppingCarts
+                                join p in db.Products on sc.ProductID equals p.ID
+                                where sc.OrderID == OrderID
+                                select new {
+                                    ProductName = p.Name,
+                                    Quantity = sc.Quantity,
+                                    UnitPrice = p.Price,
+                                    CartPrice = p.Price * sc.Quantity
+                                }).ToList();
+        
+        Console.WriteLine($"Customer: {order.CustomerName}\nOrderID: {order.ID}, Date: {order.Date}");
+
+        decimal total = 0;
+
+        foreach (var item in shoppingCartList)
+        {
+            Console.WriteLine($"{item.ProductName}, {item.UnitPrice} x {item.Quantity} = {item.CartPrice}");
+            total += item.CartPrice;
+        }
+
+        Console.WriteLine($"Grand total: {total}");
     }
 
     public static void Q5(ExamContext db)
