@@ -67,7 +67,7 @@ class Solution
                                     CartPrice = p.Price * sc.Quantity
                                 }).ToList();
         
-        Console.WriteLine($"Customer: {order.CustomerName}\nOrderID: {order.ID}, Date: {order.Date}");
+        Console.WriteLine($"Customer : {order.CustomerName}\nOrderID: {order.ID}, Date: {order.Date}");
 
         decimal total = 0;
 
@@ -100,7 +100,9 @@ class Solution
 
     public static void Q7(ExamContext db, string Country, decimal fraction)
     {
-        List<int> companies = db.Companies.Where(c => c.Country == Country).Select(c => c.ID).ToList();
+        List<int> companies = db.Companies
+            .Where(c => (c.Country == null ? "null" : c.Country.ToUpper()) == Country.ToUpper())
+            .Select(c => c.ID).ToList();
 
         List<Product> productsToUpdate = db.Products.Where(p => companies.Contains(p.ID)).ToList();
 
