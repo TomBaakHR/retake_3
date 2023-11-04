@@ -96,6 +96,23 @@ class Solution
 
     public static void Q6(ExamContext db)
     {
+        int lastC = db.Customers.OrderByDescending(c => c.ID).Select(c => c.ID).FirstOrDefault();
+        int lastO = db.Orders.OrderByDescending(c => c.ID).Select(c => c.ID).FirstOrDefault();
+
+        // TODO Create customer
+        var c = new Customer {ID = lastC + 1, FirstName = "John", LastName = "Doe"};
+
+        // TODO Create Order
+        var o = new Order {ID = lastO + 1, _Customer = c};
+
+        // TODO Add to new ShoppingCarts to the container
+        db.ShoppingCarts.Add(new ShoppingCart {_Order = o, ProductID = 1});
+        db.ShoppingCarts.Add(new ShoppingCart {_Order = o, ProductID = 2});
+
+        db.Orders.Add(o);
+        db.Customers.Add(c);
+        var recordsChanged = db.SaveChanges();
+        System.Console.WriteLine($"{recordsChanged} records got created");
     }
 
     public static void Q7(ExamContext db, string Country, decimal fraction)
