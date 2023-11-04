@@ -10,7 +10,7 @@ class Solution
         
         foreach (var item in customers)
         {
-            Console.WriteLine($"ID: {item.ID}, Firstname: {item.FirstName}, Lastname: {item.LastName}");
+            Console.WriteLine($"ID: {item.ID}, FirstName: {item.FirstName}, LastName: {item.LastName}");
         }
     }
 
@@ -67,7 +67,7 @@ class Solution
                                     CartPrice = p.Price * sc.Quantity
                                 }).ToList();
         
-        Console.WriteLine($"Customer : {order.CustomerName}\nOrderID: {order.ID}, Date: {order.Date}");
+        Console.WriteLine($"Customer : {order.CustomerName}\nOrderID: {order.ID}");
 
         decimal total = 0;
 
@@ -116,7 +116,17 @@ class Solution
     }
     public static void Q8(ExamContext db, int OrderID)
     {
-    
+        Order? orderToDelete = db.Orders.Where(o => o.ID == OrderID).FirstOrDefault();
+
+        if(orderToDelete == null){
+            System.Console.WriteLine($"Order {OrderID} not found");
+        }else{
+            db.Orders.Remove(orderToDelete);
+            int recordsChanged = db.SaveChanges();
+            System.Console.WriteLine($"{recordsChanged} records got deleted");
+            System.Console.WriteLine($"Order {OrderID} from Customer {orderToDelete.CustomerID} at {orderToDelete.dateTime} deleted");
+        }
+
     }
 
 }
