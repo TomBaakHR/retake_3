@@ -33,26 +33,16 @@ class Solution
     public static void Q3(ExamContext db)
     {
         
-        var countries = db.Companies
-                        .GroupBy(c => c.Country == null ? "NULL" : c.Country.ToUpper())
-                        .Select(group => new {
-                            Country = group.Key,
-                            Total = group.Count(),
-                            CompanyInfo = group.Select(group => new {
-                                group.ID,
-                                group.Name
-                            })
-                        }).ToList();
+        var result = from c in db.Companies
+                        group c by c.Country.ToUpper() into g
+                        select g;
 
-        foreach (var item in countries)
-        {
-            Console.WriteLine($"{item.Country}, {item.Total}");
-
-            foreach (var info in item.CompanyInfo)
+        foreach(var group in result){
+            Console.WriteLine($"{group.Key}, {group.Count()}");
+            foreach (var c in group)
             {
-                Console.WriteLine($"{info.ID}, {info.Name}");
+                System.Console.WriteLine($"{c.ID}, {c.Name}, {c.Country}");
             }
-
         }
 
     }
@@ -107,7 +97,6 @@ class Solution
 
     public static void Q6(ExamContext db)
     {
-
     }
     public static void Q7(ExamContext db, string Country, decimal fraction)
     {
