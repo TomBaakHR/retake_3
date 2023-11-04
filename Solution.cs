@@ -34,8 +34,7 @@ class Solution
     {
         
         var result = from c in db.Companies
-                        group c by c.Country.ToUpper() into g
-                        select g;
+                        group c by c.Country == null ? "NULL" :  c.Country.ToUpper();
 
         foreach(var group in result){
             Console.WriteLine($"{group.Key}, {group.Count()}");
