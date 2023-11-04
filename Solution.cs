@@ -100,11 +100,11 @@ class Solution
 
     public static void Q7(ExamContext db, string Country, decimal fraction)
     {
-        List<int> companies = db.Companies
+        List<int> companiesIDS = db.Companies
             .Where(c => (c.Country == null ? "null" : c.Country.ToUpper()) == Country.ToUpper())
             .Select(c => c.ID).ToList();
 
-        List<Product> productsToUpdate = db.Products.Where(p => companies.Contains(p.ID)).ToList();
+        List<Product> productsToUpdate = db.Products.Where(p => companiesIDS.Contains(p.CompanyID)).ToList();
 
         foreach (var p in productsToUpdate)
         {
