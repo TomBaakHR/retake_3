@@ -97,10 +97,20 @@ class Solution
     public static void Q6(ExamContext db)
     {
     }
+
     public static void Q7(ExamContext db, string Country, decimal fraction)
     {
+        List<int> companies = db.Companies.Where(c => c.Country == Country).Select(c => c.ID).ToList();
 
+        List<Product> productsToUpdate = db.Products.Where(p => companies.Contains(p.ID)).ToList();
 
+        foreach (var p in productsToUpdate)
+        {
+            p.Price *= (1 + fraction);
+        }
+
+        int recordsChanged = db.SaveChanges();
+        System.Console.WriteLine($"{recordsChanged} records got updated");
     }
     public static void Q8(ExamContext db, int OrderID)
     {
